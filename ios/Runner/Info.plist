@@ -45,5 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Add Sign in with Apple configuration -->
+    	<key>CFBundleURLTypes</key>
+    	<array>
+    		<dict>
+    			<key>CFBundleURLSchemes</key>
+    			<array>
+    				<string>YOUR_BUNDLE_ID</string> <!-- Replace with your actual bundle ID -->
+    			</array>
+    		</dict>
+    	</array>
+
 </dict>
 </plist>

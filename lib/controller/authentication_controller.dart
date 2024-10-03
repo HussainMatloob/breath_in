@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:breath_in/services/firebase_services.dart';
-import 'package:breath_in/views/screens/navigation_screen.dart';
+import 'package:breath_in/utils/flush_messages.dart';
+import 'package:breath_in/views/screens/choose_language_screen.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthenticationController extends GetxController{
  bool loginObSecure=true;
@@ -13,7 +16,7 @@ class AuthenticationController extends GetxController{
  bool loaderSignup=false;
  bool loaderLogin=false;
  bool loaderForget=false;
-
+ String? userIdentifier;
  void forGotLoading(){
    loaderForget=!loaderForget;
    update();
@@ -73,33 +76,31 @@ void loadingFunctionLogin(){
    }
  }
 
- void handleGoogleBtnClick() {
+
+ /* -------------------------------------------------------------------------- */
+/*                                  Sign in Google                             */
+/* -------------------------------------------------------------------------- */
+
+ void handleGoogleBtnClick(BuildContext context) {
    // Dialogs.showProgressBar(context);
 
-   signInWithGoogle().then((value) async {
+   signInWithGoogle(context).then((value) async {
      //Navigator.pop(context);
      if (value != null) {
        if ((await FirebaseServices.userExists())) {
-         Get.to(()=>NavigationScreen());
+         Get.to(()=>ChooseLanguageScreen());
        } else {
          await FirebaseServices.createUserWithGoogleAccount().then((value) {
-           Get.to(()=>NavigationScreen());
+           Get.to(()=>ChooseLanguageScreen());
          });
        }
-
-       Get.snackbar(
-         'Success',
-         'You login successfully',
-         colorText: Colors.black,
-         backgroundColor: Colors.white70,
-         snackPosition: SnackPosition.TOP,
-         onTap: (SnackBar) {},
-       );
+       FlushMessagesUtil.snackBarMessage( 'Success', 'You login successfully', context);
      }
    });
  }
 
- Future<UserCredential?> signInWithGoogle() async {
+
+ Future<UserCredential?> signInWithGoogle(context) async {
    try {
      await InternetAddress.lookup('google.com');
      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -111,16 +112,44 @@ void loadingFunctionLogin(){
      );
      return  FirebaseServices.auth.signInWithCredential(credential);
    } catch (e) {
-     Get.snackbar(
-       'Error',
-        e.toString(),
-       colorText: Colors.black,
-       backgroundColor: Colors.white70,
-       snackPosition: SnackPosition.TOP,
-       onTap: (SnackBar) {},
-     );
+     FlushMessagesUtil.snackBarMessage("Error", e.toString(), context);
      return null;
    }
  }
 
+  /* --------------------------------------------------------------------------*/
+ /*                                  Sign in with Apple                        */
+ /* -------------------------------------------------------------------------- */
+
+ Future<void> signInWithApple(BuildContext context) async {
+   try {
+     final appleCredential = await SignInWithApple.getAppleIDCredential(
+       scopes: [
+         AppleIDAuthorizationScopes.email,
+         AppleIDAuthorizationScopes.fullName,
+       ],
+     );
+     // Use the appleCredential to authenticate with your backend server
+       userIdentifier = appleCredential.userIdentifier;
+       update();
+   } catch (error) {
+      FlushMessagesUtil.snackBarMessage("Error", error.toString(), context);
+   }
+ }
+
+  List<Country> allCountries = CountryService().getAll();
+  List<Country> filteredCountries = CountryService().getAll();
+  int? selectedIndex;
+
+  void filterCountries(String query) {
+      filteredCountries = allCountries
+          .where((country) =>
+          country.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      update();
+  }
+  void selectCountry(int index) {
+    selectedIndex = index; // Update selected index
+    update(); // Trigger UI update
+  }
 }

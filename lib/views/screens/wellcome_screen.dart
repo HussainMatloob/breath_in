@@ -1,18 +1,44 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:breath_in/constants/Images_Constant.dart';
 import 'package:breath_in/constants/color_constant.dart';
 import 'package:breath_in/views/custom_widgets/custom_button_widget.dart';
 import 'package:breath_in/views/custom_widgets/custom_wellcome_widget.dart';
 import 'package:breath_in/views/screens/Authentication/login_screen.dart';
+import 'package:breath_in/views/screens/navigation_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../services/firebase_services.dart';
 class WellComeScreen extends StatefulWidget {
   const WellComeScreen({super.key});
   @override
   State<WellComeScreen> createState() => _WellComeScreenState();
+
 }
 class _WellComeScreenState extends State<WellComeScreen> {
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(Duration(seconds: 3), () async {
+      if (FirebaseAuth.instance.currentUser!.uid != null) {
+        if ((await FirebaseServices.userExists())) {
+           Get.offAll(( )=>NavigationScreen());
+        } else {
+          await FirebaseServices.createUserWithEmailOrContact().then((value) {
+            Get.offAll(( )=>NavigationScreen());
+          });
+        }
+      } else {
+        Get.offAll(( )=>LoginScreen());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -103,9 +129,7 @@ class _WellComeScreenState extends State<WellComeScreen> {
                     ),
                   ),
                 ],
-
               ),
-
       ),
     );
   }

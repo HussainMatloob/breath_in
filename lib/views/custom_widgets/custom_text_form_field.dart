@@ -19,6 +19,9 @@ class CustomTextFormField extends StatefulWidget {
   final VoidCallback? obSecureTap;
   final bool? isObSecure;
   final String? Function(String?)? validateFunction;
+  final Icon? prefixIcon;
+  final Function(dynamic value)? onChanged;
+  final bool? isSearch;
 
   const CustomTextFormField({
     super.key,
@@ -33,7 +36,8 @@ class CustomTextFormField extends StatefulWidget {
     this.height,
     this.isPassword = false,
     this.color,
-    this.focusNode, this.hintStyle,this.isPass =false, this.obSecureTap,this.isObSecure=false,this.validateFunction
+    this.focusNode, this.hintStyle,this.isPass =false, this.obSecureTap,this.isObSecure=false,this.validateFunction, this.prefixIcon,this.onChanged, this.isSearch=false
+
   });
 
   @override
@@ -50,6 +54,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           color: widget.color??Colors.transparent,
           borderRadius: BorderRadius.circular(10.r)),
       child: TextFormField(
+        onChanged: widget.onChanged,
         focusNode: widget.focusNode,
         //keyboardType: TextInputType.multiline,
         //maxLines: null,
@@ -67,15 +72,27 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
             ),
             hintText: widget.hintText,
-            border: OutlineInputBorder(
+            border:widget.isSearch==true ?UnderlineInputBorder(
+              borderSide: BorderSide(
+                width: 2.0.w,
+              ),
+            ) :OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
               borderSide: BorderSide(color: widget.borderColor),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder:widget.isSearch==true ?UnderlineInputBorder(
+              borderSide: BorderSide(
+                color:  widget.focusedBorderColor,
+              ),
+            ): OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
               borderSide: BorderSide(color: widget.focusedBorderColor, width: 2.0.w),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder:widget.isSearch==true ? UnderlineInputBorder(
+              borderSide: BorderSide(
+                color:  widget.focusedBorderColor,
+              ),
+            ): OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
               borderSide: BorderSide(color: widget.borderColor),
             ),
@@ -87,6 +104,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               borderRadius: BorderRadius.circular(10.r),
               borderSide: BorderSide(color: widget.errorBorderColor, width: 2.0.w),
             ),
+            prefixIcon: widget.prefixIcon??null,
             suffixIcon: widget.obSecureTap!=null?InkWell(
                 onTap: widget.obSecureTap,
                 child: widget.isObSecure! ? Icon(Icons.visibility_off_outlined):Icon(Icons.remove_red_eye)

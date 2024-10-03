@@ -13,6 +13,9 @@ class FirebaseServices{
     return (await fireStore.collection('BreathInUsers').doc(auth.currentUser!.uid).get()).exists;
   }
 
+/* -------------------------------------------------------------------------- */
+/*                       create Account with Email and Password               */
+/* -------------------------------------------------------------------------- */
   static Future<void> createUserWithEmailOrContact() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? name = sp.getString('name');
@@ -32,7 +35,9 @@ class FirebaseServices{
         .doc(auth.currentUser!.uid)
         .set(userModel.toJson());
   }
-
+/* -------------------------------------------------------------------------- */
+/*                         create Account with Google                         */
+/* -------------------------------------------------------------------------- */
   static Future<void> createUserWithGoogleAccount() async {
 
     final time = DateTime.now().millisecondsSinceEpoch.toString();

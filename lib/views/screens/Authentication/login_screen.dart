@@ -8,6 +8,7 @@ import 'package:breath_in/views/custom_widgets/custom_text.dart';
 import 'package:breath_in/views/custom_widgets/custom_text_form_field.dart';
 import 'package:breath_in/views/screens/Authentication/forget_password.dart';
 import 'package:breath_in/views/screens/Authentication/signup_screen.dart';
+import 'package:breath_in/views/screens/choose_language_screen.dart';
 import 'package:breath_in/views/screens/navigation_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final auth=FirebaseAuth.instance;
   GlobalKey<FormState> formKey=GlobalKey<FormState>();
   AuthenticationController authenticationController=Get.put(AuthenticationController());
+
 
 
 
@@ -131,10 +133,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 authenticationController.loadingFunctionLogin();
                                 if (value != null) {
                                   if ((await FirebaseServices.userExists())) {
-                                    Get.to(()=>NavigationScreen());
+                                    Get.to(()=>ChooseLanguageScreen());
                                   } else {
                                     await FirebaseServices.createUserWithEmailOrContact().then((value) {
-                                      Get.to(()=>NavigationScreen());
+                                      Get.to(()=>ChooseLanguageScreen());
                                     });
                                   }
                                   FlushMessagesUtil.snackBarMessage("Success", "Login Successfully", context);
@@ -173,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         bordercircular: 10.r,
                         boxColor: ColorConstant.whiteColor,
                         onTap: () async{
-                         authenticationController.handleGoogleBtnClick();
+                         authenticationController.handleGoogleBtnClick(context);
                         },
                       ),
                       SizedBox(height: 10.h,),
@@ -188,6 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         bordercircular: 10.r,
                         boxColor: ColorConstant.whiteColor,
                         onTap: (){
+                          authenticationController.signInWithApple(context);
                         },
                       ),
                       SizedBox(height: 10.h,),

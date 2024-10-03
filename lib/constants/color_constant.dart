@@ -12,4 +12,8 @@ class ColorConstant{
   static Color dimGray= Color(0x649D9D9D);
   static Color hintTextColor= Color(0x80000000);
   static Color borderColor = Color(0xFFD8DADC);
+  static Color iconColor=Color(0xFF717568);
+  static Color customGreen=Color(0xFFBACBA9);
+  static Color redColor=Colors.red;
+
 }
