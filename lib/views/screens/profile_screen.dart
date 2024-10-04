@@ -4,10 +4,13 @@ import 'package:breath_in/services/firebase_services.dart';
 import 'package:breath_in/views/custom_widgets/custom_Image.dart';
 import 'package:breath_in/views/custom_widgets/custom_text.dart';
 import 'package:breath_in/views/custom_widgets/custom_text_form_field.dart';
+import 'package:breath_in/views/screens/wellcome_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../constants/color_constant.dart';
 import '../custom_widgets/custom_list_tile.dart';
 
@@ -192,6 +195,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: 8.r,
                         backgroundColor: ColorConstant.snowGray,
                         onTab: (){},
+                      ),
+                      SizedBox(height: 10.w,),
+                      CustomListTile(
+                        symmetricHorizontal: 10.w,
+                        height: 48.h,
+                        width: 335.w,
+                        borderColor: ColorConstant.offWhite,
+                        text: "LogOut",
+                        icon: Icon(Icons.arrow_forward_ios_rounded,color: ColorConstant.brightCyan,size: 15.sp,),
+                        borderRadius: 8.r,
+                        backgroundColor: ColorConstant.snowGray,
+                        onTab: (){
+                          FirebaseAuth.instance.signOut();
+                          GoogleSignIn().signOut();
+                          Get.offAll(()=>WellComeScreen());
+                        },
                       ),
                   ],),
                 ),
