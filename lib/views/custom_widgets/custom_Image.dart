@@ -26,12 +26,26 @@ class CustomImage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius??0.r),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(borderRadius ?? 0.r), // Clip the image with same radius
-                child: Image.asset(
+                borderRadius: BorderRadius.circular(borderRadius ?? 0.r), // Clip the image with border radius
+                child: image != null
+                    ? Image.asset(
+                  image!, // Image path
                   height: height,
                   width: width,
-                  image ?? "",  // Fallback to empty string if no image is provided
-                  fit: BoxFit.cover, // Ensure the image covers the container fully
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // If error occurs, show fallback icon
+                    return Icon(
+                      Icons.broken_image, // Replace with your desired icon
+                      size: width ?? 50, // Set the icon size to match image container
+                      color: Colors.grey,
+                    );
+                  },
+                )
+                    : Icon(
+                  Icons.image_not_supported, // Icon when image is null or empty
+                  size: width ?? 50.w, // Set the icon size to match image container
+                  color: Colors.grey,
                 ),
               )
           ),

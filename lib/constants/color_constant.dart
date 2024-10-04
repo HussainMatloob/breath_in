@@ -15,5 +15,8 @@ class ColorConstant{
   static Color iconColor=Color(0xFF717568);
   static Color customGreen=Color(0xFFBACBA9);
   static Color redColor=Colors.red;
-
+ static Color brightCyan= Color(0xFF00B3DD);
+ static Color offWhite=Color(0xFFEEEEEE);
+ static Color softPink=Color(0xFFFEEDED);
+ static Color snowGray=Color(0xFFFAFAFA);
 }

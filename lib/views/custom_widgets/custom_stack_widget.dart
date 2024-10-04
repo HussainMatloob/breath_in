@@ -34,27 +34,30 @@ class CustomStackWidget extends StatelessWidget {
    Widget build(BuildContext context) {
      return Column(
        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: marginBottom??0.r),
-            child: Stack(children: [
-              CustomImage(
-                image: ImagesConstant.localImage,
-                height: height,
-                width: width,
-                borderRadius: borderRadius,
-              ),
-              Positioned(
-                top: positionTop,
-                left: positionLeft,
-                child: Container(child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  CustomText(textTime,fw: FontWeight.w400,size: 16.sp,color: ColorConstant.whiteColor,),
-                  CustomText(textExercise,fw: FontWeight.w400,size: 12.sp,color: ColorConstant.whiteColor,),
-                ],),),
-              )
-            ],),
-         ),
+          GestureDetector(
+            onTap:  onTab,
+            child: Container(
+              margin: EdgeInsets.only(bottom: marginBottom??0.r),
+              child: Stack(children: [
+                CustomImage(
+                  image: ImagesConstant.localImage,
+                  height: height,
+                  width: width,
+                  borderRadius: borderRadius,
+                ),
+                Positioned(
+                  top: positionTop,
+                  left: positionLeft,
+                  child: Container(child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    CustomText(textTime,fw: FontWeight.w400,size: 16.sp,color: ColorConstant.whiteColor,),
+                    CustomText(textExercise,fw: FontWeight.w400,size: 12.sp,color: ColorConstant.whiteColor,),
+                  ],),),
+                )
+              ],),
+                     ),
+          ),
        ],
      );
    }

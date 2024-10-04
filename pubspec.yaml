@@ -47,7 +47,13 @@ dependencies:
   #flutterflow_paginate_firestore: ^1.0.3+1
   google_sign_in: ^6.2.1
   firebase_storage: ^12.3.2
-  country_picker: ^2.0.17
+  country_picker: ^2.0.26
+  #on_audio_query: ^2.9.0
+  just_audio: ^0.9.40
+  file_picker: ^8.1.2
+  permission_handler: ^11.3.1
+  audioplayers: ^6.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

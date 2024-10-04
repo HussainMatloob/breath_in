@@ -6,8 +6,10 @@ import 'package:breath_in/views/custom_widgets/custom_text.dart';
 import 'package:breath_in/views/custom_widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../constants/color_constant.dart';
+import 'exercises_and_detail_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -100,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       positionTop: 25.h,
                       positionLeft: 15.w,
                       marginBottom: 10.h,
+                      onTab: (){
+                      Get.to(()=>ExercisesAndDetailScreen());
+                      },
                     )
                 ],),
               ),

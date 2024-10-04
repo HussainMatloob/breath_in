@@ -1,5 +1,7 @@
 import 'package:breath_in/constants/color_constant.dart';
+import 'package:breath_in/controller/audio_controller.dart';
 import 'package:breath_in/controller/navigation_controller.dart';
+import 'package:breath_in/views/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,7 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  //AudioController audioController=Get.put(AudioController());
   NavigationController navigationController=Get.put(NavigationController());
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   bordercircular: 100.r,
                   icon: Icon(Icons.message,color: ColorConstant.iconColor,size: 18.sp,),
                   onTap: (){
-
+                    Get.to(( )=>ChatScreen());
                   },
                   borderColor:Colors.transparent,
                 ),

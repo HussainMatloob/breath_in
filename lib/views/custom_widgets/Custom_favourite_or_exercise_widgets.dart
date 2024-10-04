@@ -43,7 +43,7 @@ class CustomFavouriteorExerciceWidget extends StatelessWidget {
                       borderRadius: borderRadius,
                     ),
                  ),
-                 Positioned(
+                icon==null?Container():Positioned(
                      top: 5.h,
                      right: 5.w,
                      child: CustomButton(

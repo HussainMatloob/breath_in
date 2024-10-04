@@ -1,12 +1,12 @@
 import 'package:breath_in/constants/Images_Constant.dart';
 import 'package:breath_in/views/custom_widgets/custom_text_form_field.dart';
+import 'package:breath_in/views/screens/sleep_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
 import '../../constants/color_constant.dart';
-import '../custom_widgets/custom_button_widget.dart';
 import '../custom_widgets/custom_post_widget.dart';
-import '../custom_widgets/custom_text.dart';
+
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -51,7 +51,7 @@ class _PostScreenState extends State<PostScreen> {
                       icon: Icon(Icons.share,color: ColorConstant.iconColor,),
                       name: "By:muhammad Ali",
                       onTab: (){
-
+                        Get.to(()=> SleepScreen());
                       },
                     ),
                   ],),

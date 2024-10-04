@@ -47,7 +47,7 @@ class CustomPostWidget extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  bottom: 5.w,
+                  bottom: 10.w,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal:  10.w),
                     color: Colors.white24,
@@ -95,7 +95,9 @@ class CustomPostWidget extends StatelessWidget {
               ],),
              Container(child: icon),
 
-            ],)
+            ],),
+          SizedBox(height: 10.h,),
+          details==null? Container():CustomText(details,fw: FontWeight.w400,size: 14.sp,color: ColorConstant.textColor,),
         ],),
     );
   }
