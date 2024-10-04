@@ -25,54 +25,57 @@ class CustomChatUsers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(padding??0.r),
-      height: height,
-      width: width,
-      decoration: BoxDecoration(color: ColorConstant.whiteColor,
-        borderRadius: BorderRadius.circular(borderRadius??0.r),
-      ),
-      child: Row(children: [
-        CustomImage(
-          image: image,
-          height: 52.h,
-          width: 52.w,
-          borderRadius: borderRadius??100.r,
+    return GestureDetector(
+      onTap: onTab,
+      child: Container(
+        padding: EdgeInsets.all(padding??0.r),
+        height: height,
+        width: width,
+        decoration: BoxDecoration(color: ColorConstant.whiteColor,
+          borderRadius: BorderRadius.circular(borderRadius??0.r),
         ),
-        SizedBox(width: 10.w,),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(userModel!.userName,fw: FontWeight.w400,size: 16.sp,color: ColorConstant.textColor,),
-                    SizedBox(width: 15.w,),
-                    CustomText("12:00",fw: FontWeight.w400,size: 10.sp,color: ColorConstant.textColor),
+        child: Row(children: [
+          CustomImage(
+            image: image,
+            height: 52.h,
+            width: 52.w,
+            borderRadius: borderRadius??100.r,
+          ),
+          SizedBox(width: 10.w,),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(userModel!.userName,fw: FontWeight.w400,size: 16.sp,color: ColorConstant.textColor,),
+                      SizedBox(width: 15.w,),
+                      CustomText("12:00",fw: FontWeight.w400,size: 10.sp,color: ColorConstant.textColor),
 
-                  ],),
-              ),
+                    ],),
+                ),
 
-              Expanded(
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // SizedBox(width: 150.w,),
-                    CustomText(lastMessage,fw: FontWeight.w400,size: 12.sp,  color: ColorConstant.textColor,),
-                    Container(
-                      height: 10.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100.r),
-                          color:ColorConstant.buttonColor),
-                      padding: EdgeInsets.all(5.r,),
-                    )
-                  ],),
-              ),
+                Expanded(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // SizedBox(width: 150.w,),
+                      CustomText(lastMessage,fw: FontWeight.w400,size: 12.sp,  color: ColorConstant.textColor,),
+                      Container(
+                        height: 10.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100.r),
+                            color:ColorConstant.buttonColor),
+                        padding: EdgeInsets.all(5.r,),
+                      )
+                    ],),
+                ),
 
-            ],),
-        )
-      ],),
+              ],),
+          )
+        ],),
+      ),
     );
   }
 }

@@ -22,6 +22,7 @@ class CustomTextFormField extends StatefulWidget {
   final Icon? prefixIcon;
   final Function(dynamic value)? onChanged;
   final bool? isSearch;
+  final double? borderRadius;
 
   const CustomTextFormField({
     super.key,
@@ -36,7 +37,7 @@ class CustomTextFormField extends StatefulWidget {
     this.height,
     this.isPassword = false,
     this.color,
-    this.focusNode, this.hintStyle,this.isPass =false, this.obSecureTap,this.isObSecure=false,this.validateFunction, this.prefixIcon,this.onChanged, this.isSearch=false
+    this.focusNode, this.hintStyle,this.isPass =false, this.obSecureTap,this.isObSecure=false,this.validateFunction, this.prefixIcon,this.onChanged, this.isSearch=false, this.borderRadius
 
   });
 
@@ -52,7 +53,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       height: widget.height,
       decoration: BoxDecoration(
           color: widget.color??Colors.transparent,
-          borderRadius: BorderRadius.circular(10.r)),
+          borderRadius: BorderRadius.circular(widget.borderRadius??10.r)),
       child: TextFormField(
         onChanged: widget.onChanged,
         focusNode: widget.focusNode,

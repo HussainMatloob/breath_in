@@ -19,4 +19,5 @@ class ColorConstant{
  static Color offWhite=Color(0xFFEEEEEE);
  static Color softPink=Color(0xFFFEEDED);
  static Color snowGray=Color(0xFFFAFAFA);
+ static Color lightGry = Color(0xFFF8F8F8);
 }
