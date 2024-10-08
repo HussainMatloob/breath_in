@@ -49,6 +49,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             key:formKey,
             child: Container(
                 padding: EdgeInsets.all(30.r),
+                height: Get.height,
                 color: ColorConstant.whiteColor,
                 child: SingleChildScrollView(
                   child: Column(

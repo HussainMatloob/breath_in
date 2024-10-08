@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:breath_in/constants/color_constant.dart';
 import 'package:breath_in/controller/audio_controller.dart';
 import 'package:breath_in/services/firebase_services.dart';
+import 'package:breath_in/utils/flush_messages.dart';
 import 'package:breath_in/views/custom_widgets/custom_button_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -52,7 +51,12 @@ class _AdminPanelState extends State<AdminPanel> {
                     boxColor: ColorConstant.dimGray,
                     bordercircular: 20.r,
                     onTap: () async{
-                      FirebaseServices.uploadAudioToFirebase(audioController.Url as File);
+                      if(audioController.Url==null){
+                        FlushMessagesUtil.snackBarMessage("error", "Please select audio", context);
+                      }
+                      else{
+                        FirebaseServices.uploadAudioToFirebase(audioController.Url as File);
+                      }
                     },
                   )
                 ],),

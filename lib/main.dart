@@ -1,5 +1,5 @@
 import 'package:breath_in/constants/color_constant.dart';
-import 'package:breath_in/views/screens/navigation_screen.dart';
+import 'package:breath_in/views/screens/wellcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: ColorConstant.whiteColor),
             useMaterial3: true,
           ),
-          home: NavigationScreen(),
+          home: WellComeScreen(),
         );
       },
     );

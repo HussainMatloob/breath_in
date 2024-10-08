@@ -30,7 +30,6 @@ class CustomTrackWidget extends StatelessWidget {
        onTap: onTab,
        child: Container(
          height: height,
-         width: width,
          decoration: BoxDecoration(color: ColorConstant.whiteColor,
          borderRadius: BorderRadius.circular(borderRadius??0.r),
          ),
@@ -49,12 +48,13 @@ class CustomTrackWidget extends StatelessWidget {
                  children: [
                  Expanded(
                    child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                     CustomText(heading,fw: FontWeight.w400,size: 13.sp,),
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                       CustomText(heading,fw: FontWeight.w400,size: 13.sp,),
 
-                     Container(child: likeIcon),
-                   ],),
+                       Container(child: likeIcon),
+                     ],),
+
                  ),
                  CustomText(time,fw: FontWeight.w400,size: 10.sp,color: ColorConstant.grayColor,),
                  CustomText(season,fw: FontWeight.w400,size: 10.sp,color: ColorConstant.grayColor,),

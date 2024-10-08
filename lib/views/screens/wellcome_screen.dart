@@ -25,7 +25,7 @@ class _WellComeScreenState extends State<WellComeScreen> {
     // TODO: implement initState
     super.initState();
     Timer(Duration(seconds: 3), () async {
-      if (FirebaseAuth.instance.currentUser!.uid != null) {
+      if (FirebaseAuth.instance.currentUser!.uid != null || FirebaseAuth.instance.currentUser!.uid.isNotEmpty) {
         if ((await FirebaseServices.userExists())) {
            Get.offAll(( )=>NavigationScreen());
         } else {
