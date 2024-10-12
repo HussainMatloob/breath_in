@@ -29,6 +29,7 @@ class CustomTrackWidget extends StatelessWidget {
      return GestureDetector(
        onTap: onTab,
        child: Container(
+         margin: EdgeInsets.only(bottom: 20.h),
          height: height,
          decoration: BoxDecoration(color: ColorConstant.whiteColor,
          borderRadius: BorderRadius.circular(borderRadius??0.r),

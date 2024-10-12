@@ -15,7 +15,8 @@ class CustomButton extends StatelessWidget {
         this.height,
         this.width,
         this.bordercircular,
-        this.onTap, this.fw,
+        this.onTap,
+        this.fw,
        this.borderWidth,
         this.image, this.icon,
         this.loader=false,
@@ -29,7 +30,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double? width;
   final double? bordercircular;
-  final onTap;
+  final VoidCallback? onTap;
   final FontWeight? fw;
   final double? borderWidth;
   final String?  image;

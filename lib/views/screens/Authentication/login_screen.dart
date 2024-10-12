@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:breath_in/constants/color_constant.dart';
 import 'package:breath_in/controller/authentication_controller.dart';
@@ -9,13 +8,10 @@ import 'package:breath_in/views/custom_widgets/custom_text_form_field.dart';
 import 'package:breath_in/views/screens/Authentication/forget_password.dart';
 import 'package:breath_in/views/screens/Authentication/signup_screen.dart';
 import 'package:breath_in/views/screens/choose_language_screen.dart';
-import 'package:breath_in/views/screens/navigation_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import '../../../constants/Images_Constant.dart';
 import '../../../utils/flush_messages.dart';
 

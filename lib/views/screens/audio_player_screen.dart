@@ -148,6 +148,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
                             ),
                             SizedBox(width: 20.w),
                             // Play/Pause button (observing the player state)
+
                             CustomButton(
                               height: 53.h,
                               width: 53.w,

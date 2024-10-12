@@ -1,10 +1,16 @@
 import 'dart:io';
-
 import 'package:breath_in/models/audio_file_model.dart';
+import 'package:breath_in/models/image_model.dart';
+import 'package:breath_in/models/messages_model.dart';
 import 'package:breath_in/models/user_model.dart';
+import 'package:breath_in/models/video_model.dart';
+import 'package:breath_in/utils/flush_messages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseServices{
@@ -12,6 +18,7 @@ class FirebaseServices{
   static FirebaseAuth auth = FirebaseAuth.instance;
   static FirebaseFirestore fireStore = FirebaseFirestore.instance;
   static FirebaseStorage storage = FirebaseStorage.instance;
+  static User get user => auth.currentUser!;
   static Future<bool> userExists() async {
     return (await fireStore.collection('BreathInUsers').doc(auth.currentUser!.uid).get()).exists;
   }
@@ -26,7 +33,7 @@ class FirebaseServices{
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final userModel = UserModel(
-      userId: auth.currentUser!.uid,
+      userId:user.uid,
       createdAt: time,
       userName: name,
       userEmail: email,
@@ -35,7 +42,7 @@ class FirebaseServices{
 
     return await fireStore
         .collection('BreathInUsers')
-        .doc(auth.currentUser!.uid)
+        .doc(user.uid)
         .set(userModel.toJson());
   }
 /* -------------------------------------------------------------------------- */
@@ -45,7 +52,7 @@ class FirebaseServices{
 
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final  userModel =  UserModel(
-      userId: auth.currentUser!.uid,
+      userId:user.uid,
       userName: auth.currentUser!.displayName.toString(),
        userImage: '',
        userEmail:auth.currentUser!.email.toString(),
@@ -54,7 +61,7 @@ class FirebaseServices{
 
     return await fireStore
         .collection('BreathInUsers')
-        .doc(auth.currentUser!.uid)
+        .doc(user.uid)
         .set(userModel.toJson());
   }
 
@@ -64,7 +71,7 @@ class FirebaseServices{
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getCurrentUser(){
     return FirebaseFirestore.instance.collection('BreathInUsers')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('userId', isEqualTo: user.uid)
         .snapshots();
   }
 
@@ -73,36 +80,67 @@ class FirebaseServices{
   /*                                get all users                               */
   /* -------------------------------------------------------------------------- */
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(){
-    return FirebaseFirestore.instance.collection('BreathInUsers')
-        .where('userId', isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .snapshots();
+
+  static Query<Map<String, dynamic>> getAllUsers(){
+    return  FirebaseFirestore.instance.collection('BreathInUsers')
+        .where('userId', isNotEqualTo: user.uid).orderBy('userId');
   }
 
 
   /* -------------------------------------------------------------------------- */
-  /*                         upload audio in Storage                            */
+  /*                  upload audio or video or image file in Storage            */
   /* -------------------------------------------------------------------------- */
-  static Future<String?> uploadAudioToFirebase(File file) async {
-    try {
-      // Get the Firebase Storage reference
-      FirebaseStorage storage = FirebaseStorage.instance;
 
-      // Create a unique path for the audio file
-      String filePath = 'audios/${DateTime.now().millisecondsSinceEpoch}.mp3';
+  static Future<List<String?>> uploadFilesToFirebaseStorage(List<File> files, String folder, FileType fileType,BuildContext context) async {
+    List<String?> downloadUrls = [];
 
-      // Upload the file
-      TaskSnapshot uploadTask = await storage.ref(filePath).putFile(file);
+    for (File file in files) {
+      try {
+        // Determine the correct file extension
+        String fileExtension;
+        if (fileType == FileType.audio || fileType == FileType.video) {
+          fileExtension = 'mp3'; // Save audio and video as .mp3
+        } else if (fileType == FileType.image) {
+          fileExtension = 'png'; // Save images as .png
+        } else {
+          fileExtension = 'unknown'; // Handle unsupported file types
+          continue; // Skip unsupported files
+        }
 
-      // Get the download URL after successful upload
-      String downloadURL = await uploadTask.ref.getDownloadURL();
-      addAudioFile(downloadURL);
-      return downloadURL;
+        // Create a unique file name with the appropriate extension
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
 
-    } catch (e) {
-      print('Error uploading file: $e');
-      return null;
+        // Reference to the Firebase Storage folder
+        final ref = FirebaseStorage.instance.ref().child('$folder/$fileName');
+
+        // Upload the file to Firebase Storage
+        final uploadTask = ref.putFile(file);
+
+        // Wait for the upload to complete
+        final snapshot = await uploadTask.whenComplete(() => null);
+
+        // Get the download URL and add it to the list
+        final downloadUrl = await snapshot.ref.getDownloadURL();
+        //downloadUrls.add(downloadUrl);
+
+        if(fileType==FileType.audio){
+          addAudioFile(downloadUrl);
+        }
+        if(fileType==FileType.video){
+          addVideoFile(downloadUrl);
+        }
+        if(fileType==FileType.image){
+          addImageFile(downloadUrl);
+        }
+
+      } catch (e) {
+        EasyLoading.dismiss();
+        FlushMessagesUtil.snackBarMessage("Error", e.toString(), context);
+        downloadUrls.add(null); // Add null to indicate failure for this file
+      }
     }
+
+    return downloadUrls; // Return the list of download URLs
   }
 
 /* -------------------------------------------------------------------------- */
@@ -113,7 +151,7 @@ class FirebaseServices{
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final audiFileModel = AudioFileModel(
-      userId: auth.currentUser!.uid,
+      userId: user.uid,
       audioFile: fileUrl,
       audioName: "",
     );
@@ -125,11 +163,115 @@ class FirebaseServices{
   }
 
   /* -------------------------------------------------------------------------- */
+  /*                         add video in FireStore                             */
+  /* -------------------------------------------------------------------------- */
+
+  static Future<void> addVideoFile(String fileUrl) async {
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+
+    final  videoModel =  VideoModel(
+      userId:user.uid,
+      videoFile: fileUrl,
+      videoName: ""
+    );
+
+    return await fireStore
+        .collection('BreathInVideos')
+        .doc(time)
+        .set(videoModel.toJson());
+  }
+  /* -------------------------------------------------------------------------- */
+  /*                         add image in FireStore                             */
+  /* -------------------------------------------------------------------------- */
+  static Future<void> addImageFile(String fileUrl) async {
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+
+    final   imageModel=  ImageModel(
+        userId: user.uid,
+        imageFile: fileUrl,
+        imageName: ""
+    );
+
+    return await fireStore
+        .collection('BreathInImages')
+        .doc(time)
+        .set(imageModel.toJson());
+  }
+
+  /* -------------------------------------------------------------------------- */
   /*                                   get audios                             */
  /* -------------------------------------------------------------------------- */
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAudioFile(){
-    return FirebaseFirestore.instance.collection('BreathInAudios')
-        .snapshots();
+  static  Query<Map<String, dynamic>> getAudioFile(){
+    return FirebaseFirestore.instance.collection('BreathInAudios');
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  get videos                                */
+  /* -------------------------------------------------------------------------- */
+
+  static Query<Map<String, dynamic>> getVideosFile(){
+    return FirebaseFirestore.instance.collection('BreathInVideos');
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 send Message                               */
+  /* -------------------------------------------------------------------------- */
+
+  static String getConservationID(String id) => user.uid.hashCode <= id.hashCode
+      ? '${user.uid}_$id'
+      : '${id}_${user.uid}';
+
+  static Future<void> sendMessage(UserModel userModel,String message,String type) async {
+
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+    final  messagesModel =  MessagesModel(
+        id: time,
+        isLive: false,
+        senderId:user.uid,
+        receiverId: userModel.userId,
+        idCombination:"${getConservationID(userModel.userId!)}",
+        message: message,
+      messageType: type
+    );
+
+    return await fireStore
+        .collection('BreathInChats')
+        .doc("${getConservationID(userModel.userId!)}").collection("Messages").doc(time)
+        .set(messagesModel.toJson());
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   getMessages                              */
+  /* -------------------------------------------------------------------------- */
+
+  static  Query<Map<String, dynamic>> getMessages(UserModel userModel){
+    return  fireStore
+        .collection('BreathInChats')
+        .doc("${getConservationID(userModel.userId!)}").collection("Messages").orderBy('id', descending: true);
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                 Upload VoiceMessage To Firebase Storage                    */
+  /* -------------------------------------------------------------------------- */
+
+  static Future<void> uploadVoiceMessage(UserModel userModel, String filePath) async {
+    File voiceFile = File(filePath);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      TaskSnapshot uploadTask = await storage
+          .ref('voice_messages/${userModel.userId}/$fileName.aac')
+          .putFile(voiceFile);
+
+      // Get the download URL
+      String downloadUrl = await uploadTask.ref.getDownloadURL();
+
+      // Store voice url to fireStore
+      await sendMessage(userModel,downloadUrl,"voice");
+      print('Voice message URL saved to Firestore');
+    } catch (e) {
+      print('Error uploading voice message: $e');
+    }
   }
 
 }

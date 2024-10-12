@@ -28,6 +28,7 @@ class CustomChatUsers extends StatelessWidget {
     return GestureDetector(
       onTap: onTab,
       child: Container(
+        margin: EdgeInsets.only(bottom: 15.h),
         padding: EdgeInsets.all(padding??0.r),
         height: height,
         width: width,

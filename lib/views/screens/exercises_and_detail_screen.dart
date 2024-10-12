@@ -43,82 +43,74 @@ class _ExercisesAndDetailScreenState extends State<ExercisesAndDetailScreen> {
             elevation: 0,
             backgroundColor: Colors.transparent,
           ),
-          body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FittedBox(
-                  child: Container(
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                        color: ColorConstant.whiteColor,
-                        borderRadius: BorderRadius.circular(7.r),
-                        boxShadow: [BoxShadow(
-                          color: Colors.grey.withOpacity(0.25),
-                          blurRadius: 0.9.r,
-                          spreadRadius: 0.1.r,
-                          offset: Offset(0, 0),
-                        )]
-                    ),
-                    child: Row(
-                      children: [
-                        CustomButton(
+          body:Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.r),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: Container(
                           height: 48.h,
-                          width: 111.w,
-                          boxColor:exerciseController.selectedTab=="Tracks"? ColorConstant.buttonColor:ColorConstant.whiteColor,
-                          bordercircular: 7.r,
-                          text: "Tracks",
-                          borderColor: Colors.transparent,
-                          onTap: (){
-                            exerciseController.selectTab("Tracks");
-                          },
+                          decoration: BoxDecoration(
+                              color: ColorConstant.whiteColor,
+                              borderRadius: BorderRadius.circular(7.r),
+                              boxShadow: [BoxShadow(
+                                color: Colors.grey.withOpacity(0.25),
+                                blurRadius: 0.9.r,
+                                spreadRadius: 0.1.r,
+                                offset: Offset(0, 0),
+                              )]
+                          ),
+                          child: Row(
+                            children: [
+                              CustomButton(
+                                height: 48.h,
+                                width: 111.w,
+                                boxColor:exerciseController.selectedTab=="Tracks"? ColorConstant.buttonColor:ColorConstant.whiteColor,
+                                bordercircular: 7.r,
+                                text: "Tracks",
+                                borderColor: Colors.transparent,
+                                onTap: (){
+                                  exerciseController.selectTab("Tracks");
+                                },
+                              ),
+                              CustomButton(
+                                height: 48.h,
+                                width: 111.w,
+                                boxColor: exerciseController.selectedTab=="Modes"? ColorConstant.buttonColor:ColorConstant.whiteColor,
+                                bordercircular: 7.r,
+                                text: "Modes",
+                                borderColor: Colors.transparent,
+                                onTap: (){
+                                  exerciseController.selectTab("Modes");
+                                },
+                              ),
+                              CustomButton(
+                                height: 48.h,
+                                width: 111.w,
+                                boxColor: exerciseController.selectedTab=="Artist"? ColorConstant.buttonColor:ColorConstant.whiteColor,
+                                bordercircular: 7.r,
+                                text: "Artist",
+                                borderColor: Colors.transparent,
+                                onTap: (){
+                                  exerciseController.selectTab("Artist");
+                                },
+                              ),
+                            ],),
                         ),
-                        CustomButton(
-                          height: 48.h,
-                          width: 111.w,
-                          boxColor: exerciseController.selectedTab=="Modes"? ColorConstant.buttonColor:ColorConstant.whiteColor,
-                          bordercircular: 7.r,
-                          text: "Modes",
-                          borderColor: Colors.transparent,
-                          onTap: (){
-                            exerciseController.selectTab("Modes");
-                          },
-                        ),
-                        CustomButton(
-                          height: 48.h,
-                          width: 111.w,
-                          boxColor: exerciseController.selectedTab=="Artist"? ColorConstant.buttonColor:ColorConstant.whiteColor,
-                          bordercircular: 7.r,
-                          text: "Artist",
-                          borderColor: Colors.transparent,
-                          onTap: (){
-                            exerciseController.selectTab("Artist");
-                          },
-                        ),
-                      ],),
-                  ),
-                ),
-                SizedBox(height: 20.h,),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                      ),
+                      SizedBox(height: 20.h,),
                       if(exerciseController.selectedTab=="Tracks")
                         TrackScreen(),
-                          if(exerciseController.selectedTab=="Modes")
-                           ModeScreen(),
-                          if(exerciseController.selectedTab=="Artist")
-                            ArtistScreen(),
-                        ]
-                    ),
+                      if(exerciseController.selectedTab=="Modes")
+                        ModeScreen(),
+                      if(exerciseController.selectedTab=="Artist")
+                        ArtistScreen(),
+
+                    ],
                   ),
                 ),
 
-              ],
-            ),
-          ),
         );
       },
     );

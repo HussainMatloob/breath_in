@@ -10,6 +10,7 @@ import 'package:breath_in/views/screens/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:paginate_firestore_plus/paginate_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -57,52 +58,32 @@ class _ChatScreenState extends State<ChatScreen> {
               focusedBorderColor: ColorConstant.customGreen,
             ),
             SizedBox(height: 20.h,),
-
-
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: FirebaseServices.getAllUsers(),
-                      builder: (context,snapshot){
-
-                        if(snapshot.hasData){
-                          final data = snapshot.data?.docs;
-                          if(data!=null){
-                            final list = data
-                                .map((e) => UserModel.fromJson(e.data()))
-                                .toList() ??
-                                [];
-                            return ListView.builder(
-                              itemCount: list.length,
-                              itemBuilder: (BuildContext context,index)
-                              {
-                               return CustomChatUsers(
-                                  height: 100.h,
-                                  padding: 10.r,
-                                  image: ImagesConstant.loginPageImage,
-                                  lastMessage: "Liksj djl",
-                                 userModel:list[index],
-                                 onTab: (){
-                                    Get.to(( )=>MessagesScreen(userModel:list[index],));
-                                 },
-                                );
-                              },
-
-                            );
-                          }
-                          else{
-                            return Container();
-                          }
-                        }
-                        else{
-                          return Container();
-                        }
-
-                      },
-                    ),
-                  ),
-
+            Expanded(
+              child: PaginateFirestore(
+                itemBuilder: (context, documentSnapshot, index) {
+                  UserModel userModel = UserModel.fromJson(
+                      documentSnapshot[index].data()
+                      as Map<String, dynamic>);
+                  return CustomChatUsers(
+                    height: 100.h,
+                    padding: 10.r,
+                    image: ImagesConstant.loginPageImage,
+                    lastMessage: "Liksj djl",
+                    userModel:userModel,
+                    onTab: (){
+                      Get.to(( )=>MessagesScreen(userModel: userModel,));
+                    },
+                  );
+                },
+                query: FirebaseServices.getAllUsers(),
+                itemBuilderType: PaginateBuilderType.listView,
+                isLive: true,
+                scrollDirection: Axis.vertical,
+                onEmpty: Center(
+                    child: CustomText("No any user")),
+              ),
+            ),
                 ],
-
         ),
       ),
     );

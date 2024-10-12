@@ -1,11 +1,9 @@
 import 'package:breath_in/constants/color_constant.dart';
-import 'package:breath_in/controller/audio_controller.dart';
 import 'package:breath_in/controller/navigation_controller.dart';
 import 'package:breath_in/views/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../custom_widgets/custom_button_widget.dart';
 import '../custom_widgets/custom_text.dart';
 class NavigationScreen extends StatefulWidget {

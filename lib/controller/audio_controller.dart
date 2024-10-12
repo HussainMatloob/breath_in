@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
@@ -7,22 +5,6 @@ import 'package:audioplayers/audioplayers.dart';
 
 
 class AudioController extends GetxController{
-  File? Url;
-     // Function to pick an audio file and return a File
-     Future<File?> pickAudioFile() async {
-       FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
-
-       if (result != null && result.files.isNotEmpty) {
-         // Return the File from the result
-         Url=File(result.files.single.path!);
-         update();
-         return File(result.files.single.path!);
-       } else {
-         // Return null if no file was selected
-         return null;
-       }
-     }
-
 
   final AudioPlayer audioPlayer=AudioPlayer();
   Rx<PlayerState> playerState = PlayerState.stopped.obs;
