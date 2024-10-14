@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 AudioFileModel audioFileModelFromJson(String str) => AudioFileModel.fromJson(json.decode(str));
-
 String audioFileModelToJson(AudioFileModel data) => json.encode(data.toJson());
 
 class AudioFileModel {

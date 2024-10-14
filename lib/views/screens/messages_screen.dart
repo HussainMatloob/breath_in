@@ -1,6 +1,8 @@
 import 'package:breath_in/constants/Images_Constant.dart';
 import 'package:breath_in/constants/color_constant.dart';
 import 'package:breath_in/controller/messages_contrller.dart';
+import 'package:breath_in/views/custom_widgets/receiver_voice_widget.dart';
+import 'package:breath_in/views/custom_widgets/sender_voice_widget.dart';
 import 'package:breath_in/models/messages_model.dart';
 import 'package:breath_in/models/user_model.dart';
 import 'package:breath_in/services/firebase_services.dart';
@@ -101,9 +103,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
                               as Map<String, dynamic>);
                       if (messagesModel.senderId ==
                           FirebaseAuth.instance.currentUser!.uid) {
-                        return senderMessage(messagesModel.message!);
+                        if(messagesModel.messageType=="voice"){
+                          return SenderVoiceWidget(messagesModel: messagesModel,);
+                        }else{
+                          return senderMessage(messagesModel.message!);
+                        }
+
                       } else {
-                        return receiverMessage(messagesModel.message!);
+                        if(messagesModel.messageType=="voice"){
+                          return ReceiverVoiceWidget(messagesModel: messagesModel,);
+                        }else{
+                          return receiverMessage(messagesModel.message!);
+                        }
+
                       }
                     },
                     query: FirebaseServices.getMessages(widget.userModel!),
